@@ -11,16 +11,17 @@ Vagrant.configure("2") do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  # config.vm.box_url = "http://domain.com/path/to/above.box"
+  config.vm.box_url = "https://dl.dropbox.com/u/7225008/Vagrant/CentOS-6.3-x86_64-minimal.box"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network :forwarded_port, host: 18080, guest: 8080
+  config.vm.network :forwarded_port, host: 4567, guest: 80
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network :private_network, ip: "192.168.33.10"
+  config.vm.network :private_network, ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -87,7 +88,8 @@ Vagrant.configure("2") do |config|
   # end
   config.vm.provision :chef_solo do |chef|
     chef.run_list = [
-      "recipe[hello]"
+      "recipe[hello::default]",
+      "recipe[hello::emacs]"
     ]
   end
   

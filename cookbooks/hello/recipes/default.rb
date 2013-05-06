@@ -18,13 +18,19 @@ end
 
 execute "rpm --import http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key"
 
-%w(java-1.7.0-openjdk jenkins).each do |pkg|
+%w(httpd java-1.7.0-openjdk jenkins).each do |pkg|
   package pkg do
     action :install
   end
 end
 
-service "jenkins" do
-  action [:start]
-  supports Hash[*[:status, :restart, :reload].product([true]).flatten]
+service "iptables" do
+  action [:stop]
+end  
+
+%w(httpd jenkins).each do |svc|
+  service svc do
+    action [:start]
+    supports Hash[*[:status, :restart, :reload].product([true]).flatten]
+  end
 end  
